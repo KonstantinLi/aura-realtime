@@ -1,0 +1,74 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: aura-realtime
+  redis:
+    host: localhost
+    port: 6379
+  webflux:
+    base-path: /api
+  main:
+    allow-bean-definition-overriding: true
+
+kafka:
+  bootstrap-servers: localhost:9092
+  consumer:
+    group-id: aura-realtime-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    auto-offset-reset: earliest
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+realtime:
+  sse:
+    buffer-size: 1000
+  ws:
+    endpoint: /ws
+  risk-thresholds:
+    low: 0.0
+    medium: 0.3
+    high: 0.7
+
+external:
+  alerts:
+    base-url: https://alerts.in.ua/api
+    api-key: ${ALERTS_API_KEY:dummy-key}
+  earthquake:
+    base-url: https://earthquake.in.ua/api
+  weather:
+    base-url: https://weather.in.ua/api
+  cameras:
+    base-url: https://cameras.in.ua/api
+
+cache:
+  widgets:
+    ttl-seconds: 60
+  users:
+    ttl-seconds: 300
+
+cors:
+  allowed-origins: "http://localhost:5173"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+  allowed-headers: "*"
+  allow-credentials: true
+
+logging:
+  level:
+    root: INFO
+    com.kpi.fict.aura.realtime: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  metrics:
+    export:
+      prometheus:
+        enabled: true
